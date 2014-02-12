@@ -29,8 +29,12 @@ class CASMiddleware(object):
             login URL, as well as calls to django.contrib.auth.views.login and
             logout.
         """
+        
         if view_func == login:
-            return cas_login(request, *view_args, **view_kwargs)
+            if settings.CAS_HIJACK_BASIC_LOGIN:
+                return cas_login(request, *view_args, **view_kwargs)
+            else:
+                return login(request, *view_args, **view_kwargs)
         if view_func == logout:
             return cas_logout(request, *view_args, **view_kwargs)
         
