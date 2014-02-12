@@ -36,7 +36,10 @@ class CASMiddleware(object):
             else:
                 return login(request, *view_args, **view_kwargs)
         if view_func == logout:
-            return cas_logout(request, *view_args, **view_kwargs)
+            if settings.CAS_HIJACK_BASIC_LOGOUT:
+                return cas_logout(request, *view_args, **view_kwargs)
+            else:
+                return logout(request, *view_args, **view_kwargs)
         
         # The rest of this method amends the Django admin authorization wich
         # will post a username/password dialog to authenticate to django admin.
