@@ -65,7 +65,8 @@ class CASBackend(ModelBackend):
                 return (None, None)
     
             username = response.getElementsByTagName('cas:user')[0].firstChild.nodeValue
-            x = f
+            x = response.getElementsByTagName('cas:user')
+            y = f
             proxies = []
             if response.getElementsByTagName('cas:proxyGrantingTicket'):
                 proxies = [p.firstChild.nodeValue for p in response.getElementsByTagName('cas:proxies')]
