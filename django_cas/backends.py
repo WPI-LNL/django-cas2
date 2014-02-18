@@ -65,8 +65,6 @@ class CASBackend(ModelBackend):
                 return (None, None)
     
             username = response.getElementsByTagName('cas:user')[0].firstChild.nodeValue
-            x = [x.toxml() for x in response.getElementsByTagName('cas')]
-            y = f
             proxies = []
             if response.getElementsByTagName('cas:proxyGrantingTicket'):
                 proxies = [p.firstChild.nodeValue for p in response.getElementsByTagName('cas:proxies')]
@@ -86,7 +84,6 @@ class CASBackend(ModelBackend):
             logger.debug("Cas proxy authentication succeeded for %s with proxies %s", username, proxies)
             return (username, proxies)
         except Exception as e:
-            raise
             logger.error("Failed to verify CAS authentication", e)
             return (None, None)
         finally:
