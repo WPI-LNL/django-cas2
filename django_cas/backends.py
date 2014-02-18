@@ -15,6 +15,12 @@ __all__ = ['CASBackend']
 
 logger = logging.getLogger(__name__)
 
+# Temporary for testing return values of CAS
+try:
+    from raven.contrib.django.raven_compat.models import client
+except:
+    pass
+
 class CASBackend(ModelBackend):
     """ CAS authentication backend """
 
@@ -63,7 +69,8 @@ class CASBackend(ModelBackend):
                 logger.warn("Authentication failed from CAS server: %s", 
                             response.getElementsByTagName('cas:authenticationFailure')[0].firstChild.nodeValue)
                 return (None, None)
-    
+            if client:
+                client.captureException(response)
             username = response.getElementsByTagName('cas:user')[0].firstChild.nodeValue
             proxies = []
             if response.getElementsByTagName('cas:proxyGrantingTicket'):
