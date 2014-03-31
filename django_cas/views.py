@@ -50,6 +50,8 @@ def _service_url(request, redirect_to):
 def _redirect_url(request):
     """ Redirects to referring page, or CAS_REDIRECT_URL if no referrer. """
 
+    if settings.CAS_FORCE_POST_LOGIN:
+        return settings.LOGIN_REDIRECT_URL
     if request.GET.get(auth.REDIRECT_FIELD_NAME):
         return _fix_encoding(request.GET.get(auth.REDIRECT_FIELD_NAME))
     
